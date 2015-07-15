@@ -1,0 +1,8 @@
+/.gradle/
+/reports/
+/.metadata/
+/.recommenders/
+/RemoteSystemsTempFiles/
+bin
+bin_test
+generated
