@@ -1,6 +1,10 @@
 package nl.jonghuis.parsing.json;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -13,6 +17,25 @@ import java.util.Map;
 
 public class JSONObject extends LinkedHashMap<String, Object> {
     private static final long serialVersionUID = -6339827005039414976L;
+
+    public static final JSONObject from(String json) throws JSONParseException {
+        try {
+            return from(new StringReader(json));
+        } catch (JSONParseException e) {
+            throw e;
+        } catch (IOException e) {
+            // Should never be possible using the StringReader
+            throw new AssertionError(e);
+        }
+    }
+
+    public static final JSONObject from(InputStream input) throws IOException {
+        return from(new InputStreamReader(input));
+    }
+
+    public static final JSONObject from(Reader reader) throws IOException {
+        return new JSONDecoder(reader).parseObject();
+    }
 
     public static final JSONObject as(Object value) throws UnexpectedTypeException {
         if (value instanceof JSONObject) {
@@ -53,8 +76,6 @@ public class JSONObject extends LinkedHashMap<String, Object> {
                         Object value = method.invoke(source);
                         if ((value instanceof Number) || (value instanceof String)) {
                             put(name, value);
-                        } else if (value instanceof Map) {
-                            put(name, JSONObject.as(value));
                         } else if (value instanceof Collection) {
                             put(name, JSONArray.as(value));
                         } else {

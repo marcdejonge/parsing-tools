@@ -1,6 +1,5 @@
 package nl.jonghuis.parsing.json;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -22,7 +21,7 @@ public class JSONDecoder {
         return parse(new StringReader(string));
     }
 
-    private final BufferedReader reader;
+    private final Reader reader;
     private int lineNumber, charNumber;
     private char c;
     private boolean endOfFile;
@@ -30,11 +29,7 @@ public class JSONDecoder {
     private final StringBuilder buffer = new StringBuilder(512);
 
     public JSONDecoder(Reader reader) throws IOException {
-        if (reader instanceof BufferedReader) {
-            this.reader = (BufferedReader) reader;
-        } else {
-            this.reader = new BufferedReader(reader);
-        }
+        this.reader = reader;
 
         lineNumber = 1;
         charNumber = 0;

@@ -10,6 +10,21 @@ public class JSONEncoder {
                                 PRETTY
     }
 
+    public static String toString(Object input) throws UnexpectedTypeException {
+        StringBuffer sb = new StringBuffer();
+        try {
+            new JSONEncoder(sb, EnumSet.noneOf(Options.class)).write(input);
+            return sb.toString();
+        } catch (IOException e) {
+            // Should never be able to happen
+            throw new AssertionError(e);
+        }
+    }
+
+    public static void encode(Object input, Appendable output) throws IOException, UnexpectedTypeException {
+        new JSONEncoder(output).write(input);
+    }
+
     private Appendable out;
     private boolean pretty;
 

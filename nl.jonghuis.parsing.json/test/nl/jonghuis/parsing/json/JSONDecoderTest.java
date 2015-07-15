@@ -77,6 +77,9 @@ public class JSONDecoderTest {
                                     .$("long", 1234567890L)
                                     .$("inner", new JSONObject().$("inner", new JSONObject()))
                                     .$("text", "text"));
+
+        // Test null values in objects
+        testCorrect("{ \"null\" : null }", new JSONObject().$("null", null));
     }
 
     private void testCorrect(String json, Object expected) throws IOException {

@@ -72,10 +72,12 @@ public class ObjectTest {
     @Test
     public void testA() throws UnexpectedTypeException, IOException {
         A original = new A(3, "test", BigInteger.valueOf(1234567890L));
-        JSONObject object = JSONObject.as(original);
-        String json = object.toJson();
+
+        String json = JSONObject.as(original).toJson();
         System.out.println(json);
-        A result = JSONObject.as(JSONDecoder.parse(json)).as(A.class);
+        JSONEncoder.encode(original, System.out);
+
+        A result = JSONObject.from(json).as(A.class);
 
         Assert.assertEquals(original, result);
     }

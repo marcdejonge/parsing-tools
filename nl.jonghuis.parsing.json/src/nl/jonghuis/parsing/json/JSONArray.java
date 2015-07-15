@@ -1,6 +1,10 @@
 package nl.jonghuis.parsing.json;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -9,6 +13,25 @@ import java.util.Collection;
 
 public class JSONArray extends ArrayList<Object> {
     private static final long serialVersionUID = 8521808387401671664L;
+
+    public static final JSONArray from(String json) throws JSONParseException {
+        try {
+            return from(new StringReader(json));
+        } catch (JSONParseException e) {
+            throw e;
+        } catch (IOException e) {
+            // Should never be possible using the StringReader
+            throw new AssertionError(e);
+        }
+    }
+
+    public static final JSONArray from(InputStream input) throws IOException {
+        return from(new InputStreamReader(input));
+    }
+
+    public static final JSONArray from(Reader reader) throws IOException {
+        return new JSONDecoder(reader).parseArray();
+    }
 
     public static final JSONArray as(Object value) throws UnexpectedTypeException {
         if (value instanceof JSONArray) {
